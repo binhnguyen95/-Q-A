@@ -1,0 +1,37 @@
+$("#detail-addrow").show();
+$("#detail-delrow").show();
+$("#reset_btn").hide();
+var DUMMY1 = parent.$("#DUMMY1").val();
+var DUMMY2 = parent.$("#DUMMY2").val();
+var DUMMY3 = parent.$("#DUMMY3").val();
+
+if (nvl(DUMMY3, "") !== "") {
+  $("#" + itmobj1["no"]).val(DUMMY3);
+  parent.$("#DUMMY3").val("");
+  $("#search_btn").trigger("click");
+}
+
+$("#SAVE_AFTER_JS, #EDIT_AFTER_JS, #DELETE_AFTER_JS").change(function(){
+    if ( $(this).val() == "Y" ) {
+        $(this).val("N");
+        parent.$("#search_btn").trigger("click");
+        parent.grid1_1.clear();
+        parent.$("#NMODModal").dialog("destroy");
+    }
+});
+
+$(`#${itmobj1["createdate"]}`).on("change", function () {
+  var time = new Date(nvl($(this).val(),0));
+  var nextDate = new Date(time.getTime() + 86400000);
+  var datestring = nextDate.getFullYear() + "-" + ("0"+(nextDate.getMonth()+1)).slice(-2) + "-" +
+    ("0" + nextDate.getDate()).slice(-2) + " " + ("0" + nextDate.getHours()).slice(-2) + ":" + ("0" + nextDate.getMinutes()).slice(-2) + ":" + ("0" + nextDate.getSeconds()).slice(-2);
+
+  const grid1Rows = grid1.getRows();
+  for (let i = 0; i < grid1Rows.length; i++) {
+      grid1.setValue(i, itmobj1["deadline"],datestring + "");
+      grid1.setValue(i, itmobj1["done_date"],datestring + "");
+  }
+  $(`#${itmobj1["deadline"]}`).val(datestring);
+  $(`#${itmobj1["done_date"]}`).val(datestring);
+});
+
